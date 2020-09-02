@@ -1,0 +1,103 @@
+spring: 
+  mvc: 
+    throw-exception-if-no-handler-found: true
+  jackson:
+    deserialization: 
+      fail-on-missing-creator-properties: 'false'
+  datasource:
+    url: jdbc:mysql://localhost:3306/CALPULLIX_VIRTUAL_MANAGER_ASSISTANT?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: adminadmin
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+  boot:
+    admin:
+      client:
+        url: http://localhost:9550
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: juan.pedraza.escom12@gmail.com
+    password: Escomjc22!
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+      
+hystrix:
+  threadpool:
+    default:
+      coreSize: 35
+      maximumSize: 35
+  command: 
+    invoke: 
+      circuitBreaker:
+        requestVolumeThreshold: 35
+        sleepWindowInMilliseconds: 1000
+      metrics:
+        rollingStatus:
+          timeInMilliseconds: 60000
+      execution: 
+        isolation: 
+          thread:
+            timeoutInMilliseconds: 10000
+          semaphore: 
+            maxConcurrentRequest: 500
+            
+logging:
+  level:
+    org:
+      springframework.web: DEBUG
+      springframework.web.servlet.DispatcherServlet: DEBUG
+      springframework.cloud.sleuth: DEBUG
+    com.citi: ERROR
+  pattern:
+    level: '[%X{data}%thread][%X{X-B3-TraceId:-}]-%5p'
+    
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: '*'
+  health:
+    defaults:
+      enabled: true
+    jms:
+      enabled: false
+  endpoint:
+    health:
+      show-details: always 
+
+eureka:
+  client:
+    registryFetchIntervalSeconds: 10
+    serviceUrl: 
+      defaultZone: http://calpullix-eureka-server-calpullix-eureka-server.apps.us-west-1.starter.openshift-online.com/eureka
+  instance:
+    preferIpAddress: false   
+  
+app:
+  message-error-location-body: Body
+  path-retrieve-purchaseorder: /retrieve/purchaseorder
+  path-retrieve-purchaseorder-detail: /retrieve/purchaseorder/detail
+  path-update-purchaseorder: /update/purchaseorder
+  path-retrieve-purchaseorder-status: /purchaseorder/status/retrieve
+  path-retrieve-purchaseorder-pdf: /purchase-order/pdf/{idPurchaseOrder}
+  path-retrieve-pdf: /pdf/serialized
+  path-citi-test: /pdf/serialized
+  scheduling-expression: 0 02 18 * * ?
+  purchase-order-descrption: Orden de compra  
+  pagination-size: 5
+  number-extra-products: 2000
+  subject-email: Orden de Compra
+  max-pool-size: 10  
+  id-image: id101
+      
+      
